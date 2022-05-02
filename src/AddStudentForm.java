@@ -1,4 +1,5 @@
 import components.BaseFrame;
+import components.SecondaryFrame;
 import components.SuccessButton;
 
 import javax.swing.*;
@@ -10,7 +11,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
-public class AddStudentForm extends BaseFrame {
+public class AddStudentForm extends SecondaryFrame {
     JLabel desc, gender, fname, mname, lname, dob, pgender, pfname, pmname, plname, address, sclass, phone;
     JTextField tfname, tmname, tlname, tpfname, tpmname, tplname;
     JRadioButton male, female, pmale, pfemale;
@@ -219,9 +220,6 @@ public class AddStudentForm extends BaseFrame {
 
         add(desc, BorderLayout.NORTH);
         add(tp, BorderLayout.CENTER);
-
-        setLocationRelativeTo(desc);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
     }
 

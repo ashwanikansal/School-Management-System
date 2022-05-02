@@ -90,6 +90,7 @@ public class AdminPage extends BaseFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddStudentForm f = new AddStudentForm();
+                f.setVisible(true);
             }
         });
 
