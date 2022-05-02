@@ -145,7 +145,6 @@ public class AddStudentForm extends SecondaryFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(tp, "Data added successfully");
-                AdminPage ap = new AdminPage();
                 dispose();
             }
         });
@@ -222,9 +221,4 @@ public class AddStudentForm extends SecondaryFrame {
         add(tp, BorderLayout.CENTER);
 
     }
-
-//    public static void main(String[] args) {
-//        AddStudentForm f = new AddStudentForm();
-//        f.setVisible(true);
-//    }
 }
