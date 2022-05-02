@@ -1,7 +1,6 @@
 import components.BaseFrame;
 import components.SchoolHeader;
 import components.SuccessButton;
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -85,6 +84,14 @@ public class AdminPage extends BaseFrame {
         sb.add(signoutbtn);
 
         //-------------event handling--------------
+
+        taddbtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AddTeacherForm f = new AddTeacherForm();
+                f.setVisible(true);
+            }
+        });
 
         saddbtn.addActionListener(new ActionListener() {
             @Override
