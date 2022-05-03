@@ -12,12 +12,14 @@ public class LoginPage extends BaseFrame {
     JTextField usertf;
     JPasswordField passtf;
     SuccessButton loginbtn, cancelbtn;
+    GridBagLayout gb;
+    GridBagConstraints gbc;
 
     LoginPage(String user){
 
         super(user+" Login");
-        GridBagLayout gb = new GridBagLayout();
-        GridBagConstraints gbc = new GridBagConstraints();
+        gb = new GridBagLayout();
+        gbc = new GridBagConstraints();
 
         userlb = new JLabel("Username ");
         passlb = new JLabel("Password ");

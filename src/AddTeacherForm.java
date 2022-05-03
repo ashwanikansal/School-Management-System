@@ -18,7 +18,7 @@ public class AddTeacherForm extends BaseForm {
         GridBagConstraints gbc = super.gbc;
         JTabbedPane tp = super.tp;
 
-        addteacher = new SuccessButton("Add Teacher");
+        addteacher = new SuccessButton("Add");
         back = new SuccessButton("Back");
 
         //----other details-------

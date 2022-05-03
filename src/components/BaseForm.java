@@ -17,9 +17,9 @@ public class BaseForm extends SecondaryFrame{
     protected JFormattedTextField ftdob, ftphone;
     protected JComboBox <String>cbclass;
     protected SuccessButton next;
-    protected GridBagLayout gb = new GridBagLayout();
-    protected GridBagConstraints gbc = new GridBagConstraints();
-    protected JTabbedPane tp = new JTabbedPane();
+    protected GridBagLayout gb;
+    protected GridBagConstraints gbc;
+    protected JTabbedPane tp;
 
     public BaseForm(String str) {
         super(str);
@@ -28,8 +28,11 @@ public class BaseForm extends SecondaryFrame{
         desc.setBorder(BorderFactory.createEmptyBorder(10,20,20,0));
 
         next = new SuccessButton("Next");
+        gb = new GridBagLayout();
+        gbc = new GridBagConstraints();
+        tp = new JTabbedPane();
 
-        //----------basic details of student----------------
+        //----------basic details----------------
 
         JPanel details = new JPanel();
         details.setLayout(gb);

@@ -93,10 +93,26 @@ public class AdminPage extends BaseFrame {
             }
         });
 
+        tsearchbtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SearchStudent f = new SearchStudent("Teacher");
+                f.setVisible(true);
+            }
+        });
+
         saddbtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddStudentForm f = new AddStudentForm();
+                f.setVisible(true);
+            }
+        });
+
+        ssearchbtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SearchStudent f = new SearchStudent("Student");
                 f.setVisible(true);
             }
         });
