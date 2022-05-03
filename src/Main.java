@@ -16,6 +16,7 @@ public class Main extends BaseFrame {
         super("St. Mary's Convent School");
 
         UIManager.put("defaultFont", new Font("Arial", Font.PLAIN, 16));
+
         GridBagLayout gb = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
         setLayout(gb);

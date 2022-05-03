@@ -62,6 +62,9 @@ public class LoginPage extends BaseFrame {
                 if(user.equalsIgnoreCase("Teacher")){
 
                 }
+                if(user.equalsIgnoreCase("Student")){
+
+                }
             }
         });
 

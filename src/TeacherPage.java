@@ -1,4 +1,3 @@
-import components.BaseForm;
 import components.BaseFrame;
 
 public class TeacherPage extends BaseFrame {
