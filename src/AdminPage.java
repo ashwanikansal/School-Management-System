@@ -96,7 +96,7 @@ public class AdminPage extends BaseFrame {
         tsearchbtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SearchStudent f = new SearchStudent("Teacher");
+                SearchST f = new SearchST("Teacher");
                 f.setVisible(true);
             }
         });
@@ -112,7 +112,7 @@ public class AdminPage extends BaseFrame {
         ssearchbtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SearchStudent f = new SearchStudent("Student");
+                SearchST f = new SearchST("Student");
                 f.setVisible(true);
             }
         });

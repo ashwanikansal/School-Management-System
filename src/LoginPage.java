@@ -63,6 +63,8 @@ public class LoginPage extends BaseFrame {
 
                 }
                 if(user.equalsIgnoreCase("Student")){
+
+
                     if(uname.equals("student") && upass.equals("student")){
                         StudentPage sp = new StudentPage();
                         dispose();

@@ -85,6 +85,8 @@ public class AddTeacherForm extends BaseForm {
         addteacher.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+
                 JOptionPane.showMessageDialog(tp, "Data added successfully");
                 dispose();
             }

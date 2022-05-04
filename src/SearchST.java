@@ -1,13 +1,16 @@
 import components.SecondaryFrame;
 import components.SuccessButton;
+import components.Table;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class SearchStudent extends SecondaryFrame {
+public class SearchST extends SecondaryFrame {
 
     protected JLabel fname, mname, lname, sclass, id, dob, desg, sub;
     protected JTextField tfname, tmname, tlname, tid, tdesg, tsub;
@@ -18,14 +21,13 @@ public class SearchStudent extends SecondaryFrame {
     protected GridBagConstraints gbc;
     String who;
 
-    public SearchStudent(String str) {
+    public SearchST(String str) {
         super("Search "+str);
         who = str;
         gb = new GridBagLayout();
         gbc = new GridBagConstraints();
 
-        add(getSearchPanel(), BorderLayout.NORTH);
-        add(new JScrollPane(getItemsPanel()), BorderLayout.CENTER);
+        add(getSearchPanel(), BorderLayout.CENTER);
 
         setMinimumSize(new Dimension(900, 500));
     }
@@ -64,6 +66,73 @@ public class SearchStudent extends SecondaryFrame {
         cbclass = new JComboBox<>(classes);
 
         searchbtn = new SuccessButton("Search");
+
+        //---------------event handling---------------
+        searchbtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Connection con = Connect.dbConnect();
+                PreparedStatement pst;
+                String ifname = tfname.getText();
+                String imname = tmname.getText();
+                String ilname = tlname.getText();
+                String iid = tid.getText();
+                String iclass =classes[cbclass.getSelectedIndex()];
+                String idob = ftdob.getText();
+
+                int lf = ifname.length();
+                int im = imname.length();
+                int il = ilname.length();
+                int lid = iid.length();
+
+                String query = "select * from teacher where " +
+                        ((lf==0)?"":"fname=?")+
+                        (im==0?"": " and mname = ?")+
+                        (il==0?"": " and lname = ?")+
+                        (lid==0?"": " and id = ?")+
+                        " and class = ?"+
+                        ((idob.equals("01-01-1970") || idob.length()==0)?"": " and dob = ?");
+
+                //--------for searching Teacher--------
+
+                if(who.equalsIgnoreCase("Teacher")){
+
+                    String idesg = tdesg.getText();
+                    String isub = tsub.getText();
+
+                    int ide = idesg.length();
+                    int isb = isub.length();
+
+                    query = query + ((ide==0)?"":" and desg = ?")
+                            + ((isb==0)?"":" and subj = ?");
+                    try {
+                        int i=0;
+                        pst = con.prepareStatement(query);
+                        if(lf!=0) pst.setString(++i,ifname);
+                        if(im!=0) pst.setString(++i,imname);
+                        if(il!=0) pst.setString(++i,ilname);
+                        if(lid!=0) pst.setString(++i,iid);
+                        pst.setString(++i,iclass);
+                        if(!(idob.equals("01-01-1970") || idob.length()==0)) pst.setString(++i,idob);
+                        if(ide!=0) pst.setString(++i, idesg);
+                        if(isb!=0) pst.setString(++i, isub);
+
+                        System.out.println(query);
+
+                        ResultSet rs = pst.executeQuery();
+                        Table t = new Table(who, rs);
+
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                }
+                else{
+
+                }
+            }
+        });
 
         gbc.gridx=1;
         gbc.gridy=1;
@@ -139,79 +208,9 @@ public class SearchStudent extends SecondaryFrame {
         return searchbox;
     }
 
-    protected JPanel getItemsPanel(){
-        JPanel items = new JPanel();
-        items.setLayout(gb);
-
-        gbc.gridx=1;
-        gbc.gridy=1;
-        gbc.insets.top=5;
-        gbc.insets.bottom=5;
-        items.add(getItemBox(false,"ID", "Name", "Class", "Date of Birth", "Subject", "Designation"), gbc);
-
-        for(int i=0; i<10; i++) {
-            gbc.gridy++;
-            items.add(getItemBox(true,"132445789", "Rakesh Kumar Sharma", "10th", "24-10-1999", "Maths", "Principal"), gbc);
-        }
-        return items;
-    }
-
-    protected JPanel getItemBox( Boolean addbtns, String...args){
-        JPanel item = new JPanel();
-        item.setPreferredSize(new Dimension(850, 30));
-        item.setMinimumSize(new Dimension(850, 30));
-
-        GridLayout gl = new GridLayout(1,4,5,2);
-        item.setLayout(gl);
-
-        JLabel iid, iname, iclass, idob, isub, idesg;
-
-        iid = new JLabel(args[0]);
-        iname = new JLabel(args[1]);
-        iclass = new JLabel(args[2]);
-        idob = new JLabel(args[3]);
-
-        SuccessButton update = new SuccessButton("Update");
-        SuccessButton delete = new SuccessButton("Delete");
-
-        item.add(iid);
-        item.add(iname);
-        item.add(iclass);
-        item.add(idob);
-
-        if(who.equalsIgnoreCase("Teacher")) {
-            isub = new JLabel(args[4]);
-            idesg = new JLabel(args[5]);
-            item.add(isub);
-            item.add(idesg);
-        }
-
-        if(addbtns) {
-            item.add(update);
-            item.add(delete);
-        }
-        else{
-            item.add(new JLabel());
-            item.add(new JLabel());
-            item.setBorder(BorderFactory.createMatteBorder(0,0,1,0, Color.gray));
-        }
-        //--------event handling----------
-
-        update.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-        delete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showConfirmDialog(searchbtn, "Are you sure ?");
-            }
-        });
-
-        return item;
+    public static void main(String[] args) {
+        SearchST s = new SearchST("Teacher");
+        s.setVisible(true);
     }
 
 }
