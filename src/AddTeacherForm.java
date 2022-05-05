@@ -4,16 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
 
 public class AddTeacherForm extends BaseForm {
 
     JLabel designation, qualification, subject, address;
-    JTextField tdesignation, tqualification, tsubject;
+    JTextField tqualification, tsubject, tdesignation;
     JTextArea taddress;
     SuccessButton addteacher, back;
 
+
     public AddTeacherForm() {
         super("Add Teacher");
+
         GridBagLayout gb = super.gb;
         GridBagConstraints gbc = super.gbc;
         JTabbedPane tp = super.tp;
@@ -85,6 +88,7 @@ public class AddTeacherForm extends BaseForm {
         addteacher.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
 
 
                 JOptionPane.showMessageDialog(tp, "Data added successfully");
