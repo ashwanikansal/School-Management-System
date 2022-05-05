@@ -1,8 +1,8 @@
 import java.sql.*;
 
 public class Connect {
-//    Connection con = null;
-//    PreparedStatement pst;
+ //Connection con = null;
+   // PreparedStatement pst;
     public static Connection dbConnect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

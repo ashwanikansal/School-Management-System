@@ -12,7 +12,7 @@ public class StudentPage extends BaseFrame {
     SimpleLabel sname, sid, ssclass, sparents, sreport, sfees;
     AddressArea saddress;
     SuccessButton signout;
-    public StudentPage(String... args) {
+    public StudentPage() {
         super("Student - Rakesh");
 
         FlowLayout fl = new FlowLayout(FlowLayout.CENTER);

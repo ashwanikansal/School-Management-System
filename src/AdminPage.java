@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 
 public class AdminPage extends BaseFrame {
 
+
+
     JLabel wel, desc;
     SuccessButton taddbtn, tsearchbtn, saddbtn, ssearchbtn, signoutbtn;
     JPanel wpanel,tpanel,spanel,fpanel;
