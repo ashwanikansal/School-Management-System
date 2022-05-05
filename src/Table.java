@@ -63,7 +63,6 @@ public class Table extends SecondaryFrame {
 
         String tablename = "students", uid="student_id";
 
-//        SuccessButton update = new SuccessButton("Update");
         SuccessButton delete = new SuccessButton("Delete");
 
         item.add(iid);
@@ -80,24 +79,14 @@ public class Table extends SecondaryFrame {
             item.add(idesg);
         }
 
-        if(addbtns) {
-//            item.add(update);
+        if(addbtns)
             item.add(delete);
-        }
+
         else{
-//            item.add(new JLabel());
             item.add(new JLabel());
             item.setBorder(BorderFactory.createMatteBorder(0,0,1,0, Color.gray));
         }
         //--------event handling----------
-
-//        update.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                AddTeacherForm af = new AddTeacherForm();
-//                af.setVisible(true);
-//            }
-//        });
 
         String finalTablename = tablename;
         String finalUid = uid;

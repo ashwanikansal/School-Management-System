@@ -96,7 +96,7 @@ public class SearchST extends SecondaryFrame {
 
                 String query = "select * from "+tname+" where " +
                         "class = ?"+
-                        ((lf==0)?"":" and first_name=?")+
+                        ((lf==0)?"":" and first_name = ?")+
                         (im==0?"": " and middle_name = ?")+
                         (il==0?"": " and last_name = ?")+
                         (lid==0?"": " and "+idname+" = ?")+
@@ -130,7 +130,10 @@ public class SearchST extends SecondaryFrame {
                         if(isb!=0) pst.setString(++i, isub);
 
                         ResultSet rs = pst.executeQuery();
-                        new Table(who, rs, con);
+                        Table t=new Table(who, rs, con);
+                        t.setVisible(true);
+
+
 
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
@@ -150,6 +153,7 @@ public class SearchST extends SecondaryFrame {
 
                         ResultSet rs = pst.executeQuery();
                         Table t = new Table(who, rs, con);
+                        t.setVisible(true);
 
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
