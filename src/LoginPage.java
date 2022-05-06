@@ -59,12 +59,16 @@ public class LoginPage extends BaseFrame {
                         JOptionPane.showMessageDialog(cent, "Username or Password is incorrect!");
                     }
                 }
-                if(user.equalsIgnoreCase("Teacher")){
-
+                else if(user.equalsIgnoreCase("Teacher")){
+                    if(uname.equals("teacher") && upass.equals("teacher")){
+                        new TeacherPage();
+                        dispose();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(cent, "Username or Password is incorrect!");
+                    }
                 }
-                if(user.equalsIgnoreCase("Student")){
-
-
+                else if(user.equalsIgnoreCase("Student")){
                     if(uname.equals("student") && upass.equals("student")){
                         new StudentPage();
                         dispose();

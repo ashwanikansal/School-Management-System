@@ -80,11 +80,6 @@ public class StudentPage extends BaseFrame {
 
         return pan;
     }
-
-    public static void main(String[] args) {
-        StudentPage f = new StudentPage();
-        f.setVisible(true);
-    }
 }
 
 class BoldLabel extends JLabel {
