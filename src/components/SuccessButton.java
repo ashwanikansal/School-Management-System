@@ -2,7 +2,6 @@ package components;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Locale;
 
 public class SuccessButton extends JButton{
 

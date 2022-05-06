@@ -40,7 +40,7 @@ public class LoginPage extends BaseFrame {
         cancelbtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main f = new Main();
+                new Main();
                 dispose();
             }
         });
@@ -52,7 +52,7 @@ public class LoginPage extends BaseFrame {
                 String upass = String.valueOf(passtf.getPassword());
                 if(user.equalsIgnoreCase("Admin")){
                     if(uname.equals("admin") && upass.equals("admin")){
-                        AdminPage ap = new AdminPage();
+                        new AdminPage();
                         dispose();
                     }
                     else{
@@ -66,7 +66,7 @@ public class LoginPage extends BaseFrame {
 
 
                     if(uname.equals("student") && upass.equals("student")){
-                        StudentPage sp = new StudentPage();
+                        new StudentPage();
                         dispose();
                     }
                     else{
