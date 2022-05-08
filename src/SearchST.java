@@ -1,6 +1,4 @@
-import components.SecondaryFrame;
-import components.SuccessButton;
-
+import components.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,63 +6,63 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class SearchST extends SecondaryFrame {
-
-    protected JLabel fname, mname, lname, sclass, id, dob, desg, sub;
-    protected JTextField tfname, tmname, tlname, tid, tdesg, tsub;
-    protected JFormattedTextField ftdob;
+    protected MyLabel fname, mname, lname, sclass, id, dob, desg, sub;
+    protected MyTextField tfname, tmname, tlname, tid, tdesg, tsub;
+    protected MyFormattedField ftdob;
     protected JComboBox <String> cbclass;
     protected SuccessButton searchbtn;
     protected GridBagLayout gb;
     protected GridBagConstraints gbc;
+
+    protected MyClient mc;
     String who;
 
-    public SearchST(String str) {
+    public SearchST(String str, MyClient mc) {
         super("Search "+str);
         who = str;
+        this.mc = mc;
         gb = new GridBagLayout();
         gbc = new GridBagConstraints();
 
         add(getSearchPanel(), BorderLayout.CENTER);
-
         setMinimumSize(new Dimension(900, 500));
     }
 
-    protected JPanel getSearchPanel(){
+    protected MyPanel getSearchPanel(){
 
-        JPanel searchbox = new JPanel();
+        MyPanel searchbox = new MyPanel();
         searchbox.setLayout(gb);
         searchbox.setBorder(BorderFactory.createTitledBorder(null,"Search By",2,0));
 
-        Connection con = Connect.dbConnect();
+        fname = new MyLabel("First Name");
+        tfname = new MyTextField(15);
 
-        fname = new JLabel("First Name");
-        tfname = new JTextField(15);
+        mname = new MyLabel("Middle Name");
+        tmname = new MyTextField(15);
 
-        mname = new JLabel("Middle Name");
-        tmname = new JTextField(15);
+        lname = new MyLabel("Last Name");
+        tlname = new MyTextField(15);
 
-        lname = new JLabel("Last Name");
-        tlname = new JTextField(15);
+        id = new MyLabel("Id");
+        tid = new MyTextField(15);
 
-        id = new JLabel("Id");
-        tid = new JTextField(15);
+        desg = new MyLabel("Designation");
+        tdesg = new MyTextField(15);
 
-        desg = new JLabel("Designation");
-        tdesg = new JTextField(15);
+        sub = new MyLabel("Subject");
+        tsub = new MyTextField(15);
 
-        sub = new JLabel("Subject");
-        tsub = new JTextField(15);
-
-        dob = new JLabel("Date of Birth");
+        dob = new MyLabel("Date of Birth");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        ftdob = new JFormattedTextField(df);
+        ftdob = new MyFormattedField(df);
         ftdob.setColumns(15);
         ftdob.setValue(0);
 
-        sclass = new JLabel("Class");
-        String[] classes = {"Nursery","LKG","UKG","1","2","3","4","5","6","7","8","9","10"};
+        sclass = new MyLabel("Class");
+        String[] classes = {"Nursery","LKG","UKG","1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th"};
         cbclass = new JComboBox<>(classes);
 
         searchbtn = new SuccessButton("Search");
@@ -88,6 +86,8 @@ public class SearchST extends SecondaryFrame {
                 int il = ilname.length();
                 int lid = iid.length();
 
+                ArrayList<String> res;
+
                 String tname="students", idname="student_id";
                 if(who.equalsIgnoreCase("Teacher")) {
                     tname = "teachers";
@@ -95,12 +95,12 @@ public class SearchST extends SecondaryFrame {
                 }
 
                 String query = "select * from "+tname+" where " +
-                        "class = ?"+
-                        ((lf==0)?"":" and first_name = ?")+
-                        (im==0?"": " and middle_name = ?")+
-                        (il==0?"": " and last_name = ?")+
-                        (lid==0?"": " and "+idname+" = ?")+
-                        ((idob.equals("1970-01-01") || idob.length()==0)?"": " and dob = ?");
+                        "class = '"+iclass+"'"+
+                        ((lf==0)?"":" and first_name = "+"'"+ifname+"'")+
+                        (im==0?"": " and middle_name = "+"'"+imname+"'")+
+                        (il==0?"": " and last_name = "+"'"+ilname+"'")+
+                        (lid==0?"": " and "+idname+" = "+"'"+iid+"'")+
+                        ((idob.equals("1970-01-01") || idob.length()==0)?"": " and dob = "+"'"+idob+"'");
 
                 //--------for searching Teacher--------
 
@@ -112,51 +112,26 @@ public class SearchST extends SecondaryFrame {
                     int ide = idesg.length();
                     int isb = isub.length();
 
-                    query = query + ((ide==0)?"":" and designation = ?")
-                            + ((isb==0)?"":" and subject = ?");
-
-                    System.out.println(query);
+                    query = query + ((ide==0)?"":" and designation = "+"'"+idesg+"'") + ((isb==0)?"":" and subject = "+"'"+isub+"'");
                     try {
-                        int i=0;
-                        pst = con.prepareStatement(query);
-
-                        if(lf!=0) pst.setString(++i,ifname);
-                        if(im!=0) pst.setString(++i,imname);
-                        if(il!=0) pst.setString(++i,ilname);
-                        if(lid!=0) pst.setString(++i,iid);
-                        pst.setString(++i,iclass);
-                        if(!(idob.equals("1970-01-01") || idob.length()==0)) pst.setString(++i,idob);
-                        if(ide!=0) pst.setString(++i, idesg);
-                        if(isb!=0) pst.setString(++i, isub);
-
-                        ResultSet rs = pst.executeQuery();
-                        Table t=new Table(who, rs, con);
+                        mc.searchTeacher(query);
+                        res = mc.rs;
+                        Table t=new Table(who, res, mc);
                         t.setVisible(true);
-
-
-
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
+                    }catch (Exception es){
+                        System.out.println(es.getMessage());
                     }
                 }
+                //--------------for searching student------------
                 else{
                     try {
-                        int i=0;
-                        pst = con.prepareStatement(query);
-
-                        if(lf!=0) pst.setString(++i,ifname);
-                        if(im!=0) pst.setString(++i,imname);
-                        if(il!=0) pst.setString(++i,ilname);
-                        if(lid!=0) pst.setString(++i,iid);
-                        pst.setString(++i,iclass);
-                        if(!(idob.equals("1970-01-01") || idob.length()==0)) pst.setString(++i,idob);
-
-                        ResultSet rs = pst.executeQuery();
-                        Table t = new Table(who, rs, con);
+                        System.out.println(query);
+                        mc.searchStudent(query);
+                        res = mc.rs;
+                        Table t = new Table(who, res, mc);
                         t.setVisible(true);
-
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
+                    } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
                     }
                 }
             }

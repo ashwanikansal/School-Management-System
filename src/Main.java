@@ -2,38 +2,38 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import components.BaseFrame;
-import components.SchoolLabel;
-import components.SuccessButton;
+import components.*;
 
 public class Main extends BaseFrame {
-
-    private JPanel btnPanel;
+    private MyLabel logo;
+    private MyPanel btnPanel;
     private SuccessButton admin, teacher, student;
 
-    Main(){
-        super("St. Mary's Convent School");
-
+    Main(MyClient mc) {
+        super("Hogwarts School of Witchcraft and Wizardry");
         UIManager.put("defaultFont", new Font("Arial", Font.PLAIN, 16));
 
         GridBagLayout gb = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
-        setLayout(gb);
 
         admin = new SuccessButton("Admin");
         teacher = new SuccessButton("Teacher");
         student = new SuccessButton("Student");
-        btnPanel = new JPanel();
+        btnPanel = new MyPanel();
+        setLayout(gb);
 
         btnPanel.add(admin);
         btnPanel.add(teacher);
         btnPanel.add(student);
 
+        ImageIcon imageIcon = new ImageIcon(new ImageIcon("src\\Resources\\schoolLogo.png").getImage().getScaledInstance(350, 350, Image.SCALE_DEFAULT));
+        logo = new MyLabel();
+        logo.setIcon(imageIcon);
+
         admin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LoginPage admlgin = new LoginPage("Admin");
+                LoginPage admlgin = new LoginPage("Admin", mc);
                 dispose();
                 admlgin.setVisible(true);
             }
@@ -41,7 +41,7 @@ public class Main extends BaseFrame {
         teacher.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LoginPage tlgn = new LoginPage("Teacher");
+                LoginPage tlgn = new LoginPage("Teacher", mc);
                 dispose();
                 tlgn.setVisible(true);
             }
@@ -49,7 +49,7 @@ public class Main extends BaseFrame {
         student.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LoginPage slgn = new LoginPage("Student");
+                LoginPage slgn = new LoginPage("Student", mc);
                 dispose();
                 slgn.setVisible(true);
             }
@@ -58,15 +58,10 @@ public class Main extends BaseFrame {
         gbc.gridx=1;
         gbc.gridy=1;
         gbc.ipady=80;
-        add(new SchoolLabel(), gbc);
+        add(logo, gbc);
 
         gbc.gridy++;
         add(btnPanel, gbc);
-
-    }
-
-    public static void main(String[] args) {
-        Main fp = new Main();
-        fp.setVisible(true);
+        getContentPane().requestFocusInWindow();
     }
 }

@@ -1,27 +1,26 @@
-import components.BaseForm;
-import components.SuccessButton;
+import components.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 public class AddTeacherForm extends BaseForm {
-
     Connection con = Connect.dbConnect();
-    JLabel designation, qualification, subject, address;
-    JTextField fname, mname, lname, tqualification, tsubject, tdesignation, tdate;
+    MyLabel designation, qualification, subject, address;
+    MyTextField fname, mname, lname, tqualification, tsubject, tdesignation;
     JTextArea taddress;
+    MyFormattedField tdate, tphone;
     SuccessButton addteacher, back;
-
-    public AddTeacherForm() {
+    String[] classes;
+    public AddTeacherForm(MyClient mc) {
         super("Add Teacher");
         fname = super.tfname;
         mname = super.tmname;
         lname = super.tlname;
         tdate = super.ftdob;
+        tphone = super.ftphone;
+        classes = super.classes;
 
         GridBagLayout gb = super.gb;
         GridBagConstraints gbc = super.gbc;
@@ -32,20 +31,25 @@ public class AddTeacherForm extends BaseForm {
 
         // ----other details-------
 
-        JPanel odetails = new JPanel();
+        MyPanel odetails = new MyPanel();
         odetails.setLayout(gb);
 
-        designation = new JLabel("Designation");
-        tdesignation = new JTextField(20);
+        designation = new MyLabel("Designation");
+        tdesignation = new MyTextField(20);
 
-        subject = new JLabel("Subject");
-        tsubject = new JTextField(20);
+        subject = new MyLabel("Subject");
+        tsubject = new MyTextField(20);
 
-        qualification = new JLabel("Qualification");
-        tqualification = new JTextField(20);
+        qualification = new MyLabel("Qualification");
+        tqualification = new MyTextField(20);
 
-        address = new JLabel("Address");
+        address = new MyLabel("Address");
         taddress = new JTextArea(5, 20);
+        taddress.setBackground(new MyColors().white);
+        taddress.setForeground(new MyColors().black);
+        taddress.setBorder(BorderFactory.createLoweredSoftBevelBorder());
+        taddress.setFont(new Font("Arial", Font.PLAIN, 15));
+        taddress.setMargin(new Insets(10,10,10,10));
 
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -95,51 +99,24 @@ public class AddTeacherForm extends BaseForm {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                PreparedStatement pst;
-                String[] arr = {"Nursery","LKG","UKG","1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th"};
                 String firstname = fname.getText();
                 String middlename = mname.getText();
                 String lastname = lname.getText();
                 String gender = (male.isSelected()) ? "Male" : "Female";
-                String gclass = arr[cbclass.getSelectedIndex()];
+                String gclass = classes[cbclass.getSelectedIndex()];
                 String designation = tdesignation.getText();
-                String qualification = tqualification.getText();
                 String subject = tsubject.getText();
-                String address = taddress.getText();
                 String date = tdate.getText();
+                String qualification = tqualification.getText();
+                String address = taddress.getText();
+                String phone = tphone.getText();
 
-                int i = (int) System.currentTimeMillis();
-                int j = 12345;
-                String q = "insert into teachers(first_name,middle_name,last_name,class,designation,subject,dob,teacher_id,student_id,gender) values(?,?,?,?,?,?,?,?,?,?)";
-                try {
-                    pst = con.prepareStatement(q);
-                    pst.setString(1, firstname);
-                    pst.setString(2, middlename);
-                    pst.setString(3, lastname);
-                    pst.setString(4, gclass);
-                    pst.setString(5, designation);
-                    pst.setString(6, subject);
-                    pst.setString(7, date);
-                    pst.setInt(8, i++);
-                    pst.setInt(9, j++);
-                    pst.setString(10, gender);
-
-                    pst.executeUpdate();
-                    fname.setText("");
-                    mname.setText("");
-                    lname.setText("");
-                    tdesignation.setText("");
-                    tqualification.setText("");
-                    tsubject.setText("");
-                    taddress.setText("");
-                    tdate.setText("");
-                    // con.close();
-
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
-
-                JOptionPane.showMessageDialog(tp, "Data added successfully");
+                int id = Math.abs((int)System.currentTimeMillis()/1000);
+                String pswd = firstname+date.substring(0,date.indexOf('-'));
+                String q = "insert into teachers(first_name,middle_name,last_name,password,class,designation,subject,dob,teacher_id,gender,qualification,address,phone) " +
+                        "values('"+firstname+"','"+middlename+"','"+lastname+"','"+pswd+"','"+gclass+"','"+designation+"','"+subject+"','"+date+"',"+id+",'"+gender+"','"+qualification+"','"+address+"','"+phone+"')";
+                if(mc.addTeacher(q)) JOptionPane.showMessageDialog(tp, "Data added successfully!");
+                else JOptionPane.showMessageDialog(tp, "Error in adding data!!");
                 dispose();
             }
         });

@@ -1,47 +1,53 @@
 import components.BaseFrame;
+import components.*;
 import components.SchoolHeader;
 import components.SuccessButton;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.util.ArrayList;
 public class TeacherPage extends BaseFrame {
-
     BoldLabel name, id, sclass, subject, designation;
     SimpleLabel sname, sid, ssclass, ssubject, sdesignation;
     SuccessButton signout;
-    public TeacherPage() {
-        super("Teacher - Rakesh");
-
+    ArrayList<String> rs;
+    public TeacherPage(MyClient mc, ArrayList<String> rs) {
+        super("Teacher - "+rs.get(1));
+        this.rs = rs;
         FlowLayout fl = new FlowLayout(FlowLayout.CENTER);
 
-        JPanel details = new JPanel();
-        details.add(getDetails());
-        details.setLayout(fl);
+        if(rs.size()==0){
+            JOptionPane.showMessageDialog(null, "Incorrect username or password");
+        }
+        else {
+            MyPanel details = new MyPanel();
+            details.add(getDetails());
+            details.setLayout(fl);
 
-        signout = new SuccessButton("Sign Out");
-        JPanel sb = new JPanel();
-        sb.add(signout);
+            signout = new SuccessButton("Sign Out");
+            MyPanel sb = new MyPanel();
+            sb.add(signout);
 
-        //---------event handling-----------
-        signout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LoginPage lp = new LoginPage("Student");
-                dispose();
-                lp.setVisible(true);
-            }
-        });
+            //---------event handling-----------
+            signout.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    LoginPage lp = new LoginPage("Student", mc);
+                    dispose();
+                    lp.setVisible(true);
+                }
+            });
 
-        add(new SchoolHeader(), BorderLayout.NORTH);
-        add(details, BorderLayout.CENTER);
-        add(sb, BorderLayout.AFTER_LAST_LINE);
+            add(new SchoolHeader(), BorderLayout.NORTH);
+            add(details, BorderLayout.CENTER);
+            add(sb, BorderLayout.AFTER_LAST_LINE);
+        }
     }
 
-    JPanel getDetails(){
+    MyPanel getDetails(){
 
-        JPanel pan = new JPanel();
+        MyPanel pan = new MyPanel();
         pan.setLayout(new GridLayout(7,2));
         pan.setPreferredSize(new Dimension(500, 300));
 
@@ -49,13 +55,13 @@ public class TeacherPage extends BaseFrame {
         id = new BoldLabel("ID : ");
         sclass = new BoldLabel("Class : ");
         subject = new BoldLabel("Subject : ");
-        designation = new BoldLabel("Report : ");
+        designation = new BoldLabel("Designation : ");
 
-        sname = new SimpleLabel("Rakesh");
-        sid = new SimpleLabel("0000000001");
-        ssclass = new SimpleLabel("7 th");
-        ssubject = new SimpleLabel("Maths");
-        sdesignation = new SimpleLabel("pgt");
+        sname = new SimpleLabel(rs.get(1)+" "+rs.get(2)+" "+rs.get(3));
+        sid = new SimpleLabel(rs.get(0));
+        ssclass = new SimpleLabel(rs.get(4));
+        ssubject = new SimpleLabel(rs.get(5));
+        sdesignation = new SimpleLabel(rs.get(6));
 
         pan.add(name);
         pan.add(sname);

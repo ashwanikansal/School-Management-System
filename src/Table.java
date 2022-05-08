@@ -1,17 +1,15 @@
-import components.SecondaryFrame;
-import components.SuccessButton;
-
+import components.*;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.plaf.metal.MetalCheckBoxIcon;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
+
 public class Table extends SecondaryFrame {
     String who;
-    public Table(String str, ResultSet rs, Connection con) throws SQLException {
+    public Table(String str, ArrayList<String> rs, MyClient mc) {
         super(str+" Data");
         who=str;
         GridBagLayout gb = new GridBagLayout();
@@ -22,46 +20,40 @@ public class Table extends SecondaryFrame {
         gbc.gridy=1;
         gbc.insets.top=5;
         gbc.insets.bottom=5;
-        if(who.equalsIgnoreCase("Teacher"))
-            add(getItemBox(false,con,"ID", "Name", "Class", "Date of Birth","Subject", "Designation"), gbc);
-        else
-            add(getItemBox(false,con, "ID", "Name", "Class", "Date of Birth"), gbc);
 
-        while(rs.next()) {
+        if(who.equalsIgnoreCase("Teacher"))
+            add(getItemBox(false,mc,"ID", "Name", "Class", "Date of Birth","Subject", "Designation"), gbc);
+        else
+            add(getItemBox(false, mc,"ID", "Name", "Class", "Date of Birth"), gbc);
+
+        for(int i=0; i<rs.size(); i++) {
             gbc.gridy++;
-            if(who.equalsIgnoreCase("Teacher"))
-                add(getItemBox(true,con,  String.valueOf(rs.getInt("teacher_id")),
-                    rs.getString("first_name")+" "+
-                            (rs.getString("middle_name")==null?"":rs.getString("middle_name"))+" "+
-                            (rs.getString("last_name")==null?"":rs.getString("last_name")),
-                    rs.getString("class"),rs.getString("dob"),
-                    rs.getString("subject"), rs.getString("designation")), gbc);
-            else
-                add(getItemBox(true, con, String.valueOf(rs.getInt("student_id")),
-                        rs.getString("first_name")+" "+
-                                (rs.getString("middle_name")==null?"":rs.getString("middle_name"))+" "+
-                                (rs.getString("last_name")==null?"":rs.getString("last_name")),
-                        rs.getString("class"),rs.getString("dob")),gbc);
+            if(who.equalsIgnoreCase("Teacher")) {
+                add(getItemBox(true,mc, rs.get(i++), rs.get(i++) + " " + (rs.get(i++)==null ? "" : rs.get(i - 1)) + " " + (rs.get(i++)==null ? "" : rs.get(i - 1)), rs.get(i++), rs.get(i++), rs.get(i++), rs.get(i)), gbc);
+            }
+            else {
+                add(getItemBox(true,mc, String.valueOf(rs.get(i++)), rs.get(i++) + " " + (rs.get(i++)==null ? "" : rs.get(i - 1)) + " " + (rs.get(i++)==null ? "" : rs.get(i - 1)), rs.get(i++), rs.get(i)), gbc);
+            }
         }
-        setMinimumSize(new Dimension(900, 500));
+        setExtendedState(Frame.MAXIMIZED_BOTH);
+        getContentPane().requestFocusInWindow();
     }
 
-    protected JPanel getItemBox(Boolean addbtns,Connection con, String...args){
-        JPanel item = new JPanel();
-        item.setPreferredSize(new Dimension(850, 30));
-        item.setMinimumSize(new Dimension(850, 30));
+    protected MyPanel getItemBox(Boolean addbtns, MyClient mc, String...args){
+        MyPanel item = new MyPanel();
+        item.setPreferredSize(new Dimension(1400, 50));
+        item.setMinimumSize(new Dimension(1400, 50));
+
 
         GridLayout gl = new GridLayout(1,4,5,2);
         item.setLayout(gl);
 
-        JLabel iid, iname, iclass, idob, isub, idesg;
+        MyLabel iid, iname, iclass, idob, isub, idesg;
 
-        iid = new JLabel(args[0]);
-        iname = new JLabel(args[1]);
-        iclass = new JLabel(args[2]);
-        idob = new JLabel(args[3]);
-
-        String tablename = "students", uid="student_id";
+        iid = new MyLabel(args[0]);
+        iname = new MyLabel(args[1]);
+        iclass = new MyLabel(args[2]);
+        idob = new MyLabel(args[3]);
 
         SuccessButton delete = new SuccessButton("Delete");
 
@@ -71,35 +63,42 @@ public class Table extends SecondaryFrame {
         item.add(idob);
 
         if(who.equalsIgnoreCase("Teacher")) {
-            tablename = "teachers";
-            uid = "teacher_id";
-            isub = new JLabel(args[4]);
-            idesg = new JLabel(args[5]);
+            isub = new MyLabel(args[4]);
+            idesg = new MyLabel(args[5]);
             item.add(isub);
             item.add(idesg);
         }
 
-        if(addbtns)
+        if(addbtns) {
             item.add(delete);
+            item.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,2,0, new MyColors().primary),BorderFactory.createEmptyBorder(0,0,10,0)));
+        }
 
         else{
-            item.add(new JLabel());
-            item.setBorder(BorderFactory.createMatteBorder(0,0,1,0, Color.gray));
+            item.add(new MyLabel());
+            item.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0,0,3,0, new MyColors().black),BorderFactory.createEmptyBorder(0,0,10,0)));
         }
+
         //--------event handling----------
 
-        String finalTablename = tablename;
-        String finalUid = uid;
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int i=JOptionPane.showConfirmDialog(null, "Are you sure?","Delete", JOptionPane.YES_NO_OPTION);
+                String query;
                 if(i==0){
-                    try {
-                        Statement st = con.createStatement();
-                        st.executeUpdate("delete from "+ finalTablename +" where "+ finalUid +" = "+args[0]);
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
+                    if(who.equalsIgnoreCase("Teacher")) {
+                        query = "delete from teachers where teacher_id = " + args[0];
+                        if(mc.deleteTeacher(query)){
+                            JOptionPane.showMessageDialog(null, "Deleted Successfully!");
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Error in deleting!");
+                        }
+                    }
+                    else{
+                        query = "delete from students where student_id = " + args[0];
+                        if(mc.deleteStudent(query)) JOptionPane.showMessageDialog(null, "Deleted Successfully!");
+                        else JOptionPane.showMessageDialog(null, "Error in deleting!");
                     }
                 }
             }

@@ -11,65 +11,70 @@ import java.text.SimpleDateFormat;
 
 public class BaseForm extends SecondaryFrame{
 
-    protected JLabel desc, gender, fname, mname, lname, dob, sclass, phone;
-    protected JTextField tfname, tmname, tlname;
+    protected MyLabel desc, gender, fname, mname, lname, dob, sclass, phone;
+    protected MyTextField tfname, tmname, tlname;
     protected JRadioButton male, female;
-    protected JFormattedTextField ftdob, ftphone;
+    protected MyFormattedField ftdob, ftphone;
     protected JComboBox <String>cbclass;
     protected SuccessButton next;
     protected GridBagLayout gb;
     protected GridBagConstraints gbc;
     protected JTabbedPane tp;
+    protected String[] classes = {"Nursery","LKG","UKG","1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th"};
 
     public BaseForm(String str) {
         super(str);
 
-        desc = new JLabel("Fill in all the details below ");
+        desc = new MyLabel("Fill in all the details below ");
         desc.setBorder(BorderFactory.createEmptyBorder(10,20,20,0));
 
         next = new SuccessButton("Next");
         gb = new GridBagLayout();
         gbc = new GridBagConstraints();
+        UIManager.put("TabbedPane.contentOpaque", false);
         tp = new JTabbedPane();
+
 
         //----------basic details----------------
 
-        JPanel details = new JPanel();
+        MyPanel details = new MyPanel();
         details.setLayout(gb);
 
-        fname = new JLabel("First Name");
-        tfname = new JTextField(20);
+        fname = new MyLabel("First Name");
+        tfname = new MyTextField(20);
 
-        mname = new JLabel("Middle Name");
-        tmname = new JTextField(20);
+        mname = new MyLabel("Middle Name");
+        tmname = new MyTextField(20);
 
-        lname = new JLabel("Last Name");
-        tlname = new JTextField(20);
+        lname = new MyLabel("Last Name");
+        tlname = new MyTextField(20);
 
-        gender = new JLabel("Gender");
+        gender = new MyLabel("Gender");
         male = new JRadioButton("Male", true);
+        male.setOpaque(false);
         female = new JRadioButton("Female");
+        female.setOpaque(false);
         ButtonGroup bg = new ButtonGroup();
         bg.add(male); bg.add(female);
-        JPanel gpanel = new JPanel();
+        MyPanel gpanel = new MyPanel();
         gpanel.add(male);
         gpanel.add(female);
 
-        dob = new JLabel("Date of Birth");
+        dob = new MyLabel("Date of Birth");
         DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-        ftdob = new JFormattedTextField(df);
+        ftdob = new MyFormattedField(df);
         ftdob.setColumns(20);
         ftdob.setValue(0);
 
-        sclass = new JLabel("Class");
-        String[] classes = {"Nursery","LKG","UKG","1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th"};
+        sclass = new MyLabel("Class");
         cbclass = new JComboBox<>(classes);
 
-        phone = new JLabel("Phone No.");
+        phone = new MyLabel("Phone No.");
         NumberFormat nf = NumberFormat.getInstance();
+        nf.setGroupingUsed(false);
         NumberFormatter nft = new NumberFormatter(nf);
         nft.setAllowsInvalid(false);
-        ftphone = new JFormattedTextField(nft);
+        ftphone = new MyFormattedField(nft);
         ftphone.setColumns(20);
 
         gbc.gridx=1;
@@ -135,6 +140,7 @@ public class BaseForm extends SecondaryFrame{
         });
 
         tp.addTab("Basic Details", details);
+        tp.setBackgroundAt(0,new MyColors().lsecondary);
 
         add(desc, BorderLayout.NORTH);
         add(tp, BorderLayout.CENTER);

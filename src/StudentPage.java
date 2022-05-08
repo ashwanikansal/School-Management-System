@@ -1,35 +1,33 @@
-import components.BaseFrame;
-import components.SchoolHeader;
-import components.SuccessButton;
+import components.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class StudentPage extends BaseFrame {
-
-    BoldLabel name, id, sclass, address, parents, report, fees;
-    SimpleLabel sname, sid, ssclass, sparents, sreport, sfees;
-    AddressArea saddress;
+    BoldLabel name, id, sclass, dob, fees;
+    SimpleLabel sname, sid, ssclass, sfees, sdob;
     SuccessButton signout;
-    public StudentPage() {
-        super("Student - Rakesh");
-
+    ArrayList<String> rs;
+    public StudentPage(MyClient mc, ArrayList<String> rs) {
+        super("Student - "+rs.get(1));
+        this.rs = rs;
         FlowLayout fl = new FlowLayout(FlowLayout.CENTER);
 
-        JPanel details = new JPanel();
+        MyPanel details = new MyPanel();
         details.add(getDetails());
         details.setLayout(fl);
 
         signout = new SuccessButton("Sign Out");
-        JPanel sb = new JPanel();
+        MyPanel sb = new MyPanel();
         sb.add(signout);
 
         //---------event handling-----------
         signout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LoginPage lp = new LoginPage("Student");
+                LoginPage lp = new LoginPage("Student", mc);
                 dispose();
                 lp.setVisible(true);
             }
@@ -40,28 +38,23 @@ public class StudentPage extends BaseFrame {
         add(sb, BorderLayout.AFTER_LAST_LINE);
     }
 
-    JPanel getDetails(){
+    MyPanel getDetails(){
 
-        JPanel pan = new JPanel();
+        MyPanel pan = new MyPanel();
         pan.setLayout(new GridLayout(7,2));
         pan.setPreferredSize(new Dimension(500, 300));
 
         name = new BoldLabel("Name : ");
         id = new BoldLabel("ID : ");
         sclass = new BoldLabel("Class : ");
-        address = new BoldLabel("Address : ");
-        parents = new BoldLabel("Parent's Name : ");
-        report = new BoldLabel("Report : ");
+        dob = new BoldLabel("Date of Birth : ");
         fees = new BoldLabel("Fees status : ");
 
-        sname = new SimpleLabel("Rakesh");
-        sid = new SimpleLabel("0000000001");
-        ssclass = new SimpleLabel("7 th");
-        saddress = new AddressArea("Patel Nagar, New York, abarakadabra bhootiya haweli");
-        saddress.setLineWrap(true);
-        sparents = new SimpleLabel("Harish Chandra");
-        sreport = new SimpleLabel("Fail");
-        sfees = new SimpleLabel("Paid");
+        sname = new SimpleLabel(rs.get(1)+" "+rs.get(2)+" "+rs.get(3));
+        sid = new SimpleLabel(rs.get(0));
+        ssclass = new SimpleLabel(rs.get(4));
+        sdob = new SimpleLabel(rs.get(5));
+        sfees = new SimpleLabel(rs.get(6));
 
         pan.add(name);
         pan.add(sname);
@@ -69,12 +62,8 @@ public class StudentPage extends BaseFrame {
         pan.add(sid);
         pan.add(sclass);
         pan.add(ssclass);
-        pan.add(address);
-        pan.add(saddress);
-        pan.add(parents);
-        pan.add(sparents);
-        pan.add(report);
-        pan.add(sreport);
+        pan.add(dob);
+        pan.add(sdob);
         pan.add(fees);
         pan.add(sfees);
 

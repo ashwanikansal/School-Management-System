@@ -1,46 +1,45 @@
-import components.BaseFrame;
-import components.SchoolHeader;
-import components.SuccessButton;
-
+import components.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginPage extends BaseFrame {
-    JLabel userlb, passlb;
-    JTextField usertf;
-    JPasswordField passtf;
+    MyLabel userlb, passlb;
+    MyTextField usertf;
+    MyPasswordField passtf;
     SuccessButton loginbtn, cancelbtn;
     GridBagLayout gb;
     GridBagConstraints gbc;
 
-    LoginPage(String user){
+    LoginPage(String user, MyClient mc){
 
         super(user+" Login");
         gb = new GridBagLayout();
         gbc = new GridBagConstraints();
 
-        userlb = new JLabel("Username ");
-        passlb = new JLabel("Password ");
-        usertf = new JTextField(20);
-        passtf = new JPasswordField(20);
+        userlb = new MyLabel("Username ");
+        passlb = new MyLabel("Password ");
+        usertf = new MyTextField(20);
+        passtf = new MyPasswordField(20);
         loginbtn = new SuccessButton("Login");
         cancelbtn = new SuccessButton("Cancel");
 
-        JPanel form = new JPanel();
+        MyPanel form = new MyPanel();
         form.setLayout(gb);
 
-        JPanel btns = new JPanel();
+        MyPanel btns = new MyPanel();
         btns.setLayout(gb);
 
-        JPanel cent = new JPanel();
+        MyPanel cent = new MyPanel();
         cent.setLayout(gb);
+
+        //------------event handling--------------
 
         cancelbtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Main();
+                new Main(mc);
                 dispose();
             }
         });
@@ -48,11 +47,13 @@ public class LoginPage extends BaseFrame {
         loginbtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 String uname = usertf.getText();
                 String upass = String.valueOf(passtf.getPassword());
+
                 if(user.equalsIgnoreCase("Admin")){
                     if(uname.equals("admin") && upass.equals("admin")){
-                        new AdminPage();
+                        new AdminPage(mc);
                         dispose();
                     }
                     else{
@@ -60,8 +61,9 @@ public class LoginPage extends BaseFrame {
                     }
                 }
                 else if(user.equalsIgnoreCase("Teacher")){
-                    if(uname.equals("teacher") && upass.equals("teacher")){
-                        new TeacherPage();
+                    String query = "select * from teachers where teacher_id = "+uname+" and password = '"+upass+"'";
+                    if(mc.teacherlogin(query)){
+                        new TeacherPage(mc, mc.rs);
                         dispose();
                     }
                     else{
@@ -69,8 +71,9 @@ public class LoginPage extends BaseFrame {
                     }
                 }
                 else if(user.equalsIgnoreCase("Student")){
-                    if(uname.equals("student") && upass.equals("student")){
-                        new StudentPage();
+                    String query = "select * from students where student_id = '"+uname+"' and password = '"+upass+"'";
+                    if(mc.studentlogin(query)){
+                        new StudentPage(mc, mc.rs);
                         dispose();
                     }
                     else{

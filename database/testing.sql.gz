@@ -1,0 +1,105 @@
+-- phpMyAdmin SQL Dump
+-- version 5.1.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: May 08, 2022 at 10:47 AM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.5
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `testing`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `students`
+--
+
+CREATE TABLE `students` (
+  `student_id` int(15) NOT NULL,
+  `password` varchar(15) NOT NULL,
+  `first_name` varchar(15) NOT NULL,
+  `middle_name` varchar(15) NOT NULL,
+  `last_name` varchar(15) NOT NULL,
+  `gender` varchar(10) NOT NULL,
+  `dob` varchar(15) NOT NULL,
+  `fees` int(15) NOT NULL,
+  `class` varchar(10) NOT NULL,
+  `pfirst_name` varchar(15) NOT NULL,
+  `pmiddle_name` varchar(15) NOT NULL,
+  `plast_name` varchar(15) NOT NULL,
+  `pgender` varchar(10) NOT NULL,
+  `phone` varchar(12) NOT NULL,
+  `address` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`student_id`, `password`, `first_name`, `middle_name`, `last_name`, `gender`, `dob`, `fees`, `class`, `pfirst_name`, `pmiddle_name`, `plast_name`, `pgender`, `phone`, `address`) VALUES
+(1611810, 'Richi01', 'Richi', '', 'Rich', 'Male', '01-01-2000', 8000, '10th', 'Puru', '', 'Singh', 'Male', '9317862452', 'Vsant Vihar, Punjab'),
+(1614390, 'Mussu01', 'Mussu', '', 'Sharma', 'Female', '01-01-2000', 1000, 'Nursery', 'Deepu', '', 'Sharma', 'Male', '9764318524', 'Goa, India');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `teachers`
+--
+
+CREATE TABLE `teachers` (
+  `teacher_id` int(10) NOT NULL,
+  `password` varchar(15) NOT NULL,
+  `first_name` varchar(15) NOT NULL,
+  `middle_name` varchar(15) NOT NULL,
+  `last_name` varchar(15) NOT NULL,
+  `gender` varchar(10) NOT NULL,
+  `designation` varchar(25) NOT NULL,
+  `class` varchar(10) NOT NULL,
+  `qualification` varchar(15) NOT NULL,
+  `address` varchar(100) NOT NULL,
+  `dob` varchar(15) NOT NULL,
+  `subject` varchar(25) NOT NULL,
+  `phone` varchar(12) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `teachers`
+--
+
+INSERT INTO `teachers` (`teacher_id`, `password`, `first_name`, `middle_name`, `last_name`, `gender`, `designation`, `class`, `qualification`, `address`, `dob`, `subject`, `phone`) VALUES
+(1565704, 'Severus01', 'Severus', '', 'Snape', 'Male', 'Head of Slytherin', '10th', 'Master in DA', 'Hogwarts School', '01-01-1980', 'Defence against Dark Arts', '1234567890'),
+(1616729, 'Rakesh01', 'Rakesh', 'Kumar', 'Jha', 'Male', 'Principal', '10th', 'M. Tech', 'Patel Nagar, Haryana', '01-01-1995', 'CS', '7988185883');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `students`
+--
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`student_id`);
+
+--
+-- Indexes for table `teachers`
+--
+ALTER TABLE `teachers`
+  ADD PRIMARY KEY (`teacher_id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
